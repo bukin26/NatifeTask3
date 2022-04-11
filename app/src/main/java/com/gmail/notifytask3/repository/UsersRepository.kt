@@ -12,12 +12,16 @@ class UsersRepository(private val usersService: UsersService, private val usersD
         return usersService.fetchUsers()
     }
 
-    suspend fun updateUsers(users: List<User>) {
+    suspend fun insertUsers(users: List<User>) {
         usersDao.insertAll(users)
     }
 
     suspend fun loadUsers(): List<User> {
         return usersDao.getAll()
+    }
+
+    suspend fun deleteUsers() {
+        usersDao.deleteAll()
     }
 
     suspend fun getUser(email: String): User {

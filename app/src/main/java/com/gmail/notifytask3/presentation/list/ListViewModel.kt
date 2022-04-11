@@ -13,6 +13,7 @@ import kotlinx.coroutines.withContext
 
 class ListViewModel(private val repository: UsersRepository) : ViewModel() {
 
+    private var firstLoading: Boolean = true
     private val _users = MutableLiveData<List<User>>()
     val users: LiveData<List<User>>
         get() = _users
@@ -23,19 +24,29 @@ class ListViewModel(private val repository: UsersRepository) : ViewModel() {
 
     fun getUsers() {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.fetchUsers()
-            var loadedUsers = emptyList<User>()
-            if (response.isSuccessful) {
-                response.body()?.results?.let { it ->
-                    loadedUsers = it.map(UserResponse::toUser)
-                    repository.updateUsers(loadedUsers)
+            try {
+                val response = repository.fetchUsers()
+                var loadedUsers = emptyList<User>()
+                if (response.isSuccessful) {
+                    if (firstLoading) {
+                        repository.deleteUsers()
+                        firstLoading = false
+                    }
+                    response.body()?.results?.let { it ->
+                        loadedUsers = it.map(UserResponse::toUser)
+                        repository.insertUsers(loadedUsers)
+                    }
+                } else {
+                    loadedUsers = repository.loadUsers()
                 }
-            } else {
-                loadedUsers = repository.loadUsers()
-            }
-            withContext(Dispatchers.Main) {
-                val currentUsers = _users.value
-                _users.value = currentUsers?.plus(loadedUsers) ?: loadedUsers
+                withContext(Dispatchers.Main) {
+                    val currentUsers = _users.value
+                    _users.value = currentUsers?.plus(loadedUsers) ?: loadedUsers
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _users.value = repository.loadUsers()
+                }
             }
         }
     }
