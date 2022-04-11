@@ -7,12 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gmail.notifytask3.data.User
 import com.gmail.notifytask3.databinding.ItemListBinding
-
-private const val USER_PREFETCH_CONT = 5
+import com.gmail.notifytask3.util.Constants
 
 class UsersAdapter(
     private val onClick: (User) -> Unit,
-    private val usersFetchCallback: () -> Unit
+    private val usersFetchCallback: (Int) -> Unit
 ) : ListAdapter<User, UsersAdapter.UsersViewHolder>(ItemDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
@@ -23,8 +22,8 @@ class UsersAdapter(
     override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item, onClick)
-        if (itemCount - position == USER_PREFETCH_CONT) {
-            usersFetchCallback()
+        if (itemCount - position == Constants.USER_PREFETCH_CONT) {
+            usersFetchCallback(itemCount + 1)
         }
     }
 

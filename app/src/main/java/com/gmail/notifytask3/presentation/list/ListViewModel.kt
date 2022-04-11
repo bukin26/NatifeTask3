@@ -18,10 +18,10 @@ class ListViewModel(private val repository: UsersRepository) : ViewModel() {
         get() = _users
 
     init {
-        getUsers()
+        getUsers(0)
     }
 
-    fun getUsers() {
+    fun getUsers(offset: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val newUsers = try {
                 val loadedUsers = repository.fetchUsers()
@@ -32,11 +32,11 @@ class ListViewModel(private val repository: UsersRepository) : ViewModel() {
                 repository.insertUsers(loadedUsers)
                 loadedUsers
             } catch (e: Exception) {
-                repository.loadUsers()
+                repository.loadUsers(offset)
             }
             val currentUsers = _users.value
             withContext(Dispatchers.Main) {
-                _users.value = currentUsers?.plus(newUsers)?.distinct() ?: newUsers
+                _users.value = currentUsers?.plus(newUsers) ?: newUsers
             }
         }
     }

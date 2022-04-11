@@ -19,7 +19,7 @@ class ListFragment : Fragment() {
     private lateinit var binding: FragmentListBinding
     private val adapter = UsersAdapter(
         onClick = ::adapterOnClick,
-        usersFetchCallback = { fetchUsers() }
+        usersFetchCallback = { offset -> fetchUsers(offset) }
     )
     private val viewModel: ListViewModel by lazy {
         val service = UsersService.create()
@@ -50,8 +50,8 @@ class ListFragment : Fragment() {
         }
     }
 
-    private fun fetchUsers() {
-        viewModel.getUsers()
+    private fun fetchUsers(offset: Int) {
+        viewModel.getUsers(offset)
     }
 
     private fun adapterOnClick(user: User) {

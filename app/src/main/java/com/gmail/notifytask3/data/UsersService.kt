@@ -1,8 +1,8 @@
 package com.gmail.notifytask3.data
 
+import com.gmail.notifytask3.util.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -12,7 +12,7 @@ interface UsersService {
 
     @GET("api")
     suspend fun fetchUsers(
-        @Query("results") results: Int = 15
+        @Query("results") results: Int = Constants.USERS_PAGE_SIZE
     ): UsersList
 
     companion object {

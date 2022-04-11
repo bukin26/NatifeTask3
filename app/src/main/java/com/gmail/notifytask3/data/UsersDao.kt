@@ -8,8 +8,8 @@ import androidx.room.Query
 @Dao
 interface UsersDao {
 
-    @Query("SELECT * FROM users")
-    suspend fun getAll(): List<User>
+    @Query("SELECT * FROM users LIMIT :limit OFFSET :offset")
+    suspend fun getAll(limit: Int, offset: Int): List<User>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(users: List<User>)
