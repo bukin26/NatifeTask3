@@ -10,7 +10,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DetailsViewModel(private val repository: UsersRepository, private val email: String) : ViewModel() {
+class DetailsViewModel(
+    private val repository: UsersRepository,
+    private val email: String
+) :
+    ViewModel() {
 
     private val _user = MutableLiveData<User>()
     val user: LiveData<User>
@@ -21,7 +25,7 @@ class DetailsViewModel(private val repository: UsersRepository, private val emai
     }
 
     private fun getUser() {
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             val user = repository.getUser(email)
             withContext(Dispatchers.Main) {
                 _user.value = user

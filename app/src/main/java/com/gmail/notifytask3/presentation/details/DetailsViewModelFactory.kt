@@ -9,8 +9,8 @@ class DetailsViewModelFactory(
     private val repository: UsersRepository,
     private val email: String
 ) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
 
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         when (modelClass) {
             DetailsViewModel::class.java -> return DetailsViewModel(repository, email) as T
         }

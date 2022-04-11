@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">NotifyTask3</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="user_name">%1s %2s</string>
+    <string name="user_age">%1s years</string>
 </resources>

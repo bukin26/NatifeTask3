@@ -1,16 +1,13 @@
 package com.gmail.notifytask3.data
 
 import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 
 data class UsersList(
 
     @field:SerializedName("results")
-
-    val results: List<User>,
+    val results: List<UserResponse>,
 
     @field:SerializedName("info")
     val info: Info
@@ -45,7 +42,6 @@ data class Location(
     @field:SerializedName("city")
     val city: String?,
 
-    @Embedded
     @field:SerializedName("street")
     val street: Street?,
 
@@ -56,7 +52,6 @@ data class Location(
     @field:SerializedName("postcode")
     val postcode: String?,
 
-    @Embedded
     @field:SerializedName("coordinates")
     val coordinates: Coordinates?,
 
@@ -91,8 +86,7 @@ data class Id(
     val value: String?
 )
 
-@Entity(tableName = "users")
-data class User(
+data class UserResponse(
 
     @field:SerializedName("nat")
     val nat: String?,
@@ -103,41 +97,44 @@ data class User(
     @field:SerializedName("phone")
     val phone: String?,
 
-    @Embedded
     @field:SerializedName("dob")
     val dob: Dob?,
 
-    @Embedded
     @field:SerializedName("name")
     val name: Name?,
 
-    @Embedded(prefix = "registered")
     @field:SerializedName("registered")
     val registered: Registered?,
 
-    @Embedded
     @field:SerializedName("location")
     val location: Location?,
 
-    @Embedded(prefix = "id")
     @field:SerializedName("id")
     val id: Id?,
 
-    @Embedded
     @field:SerializedName("login")
     val login: Login?,
 
     @field:SerializedName("cell")
     val cell: String?,
 
-    @PrimaryKey
     @field:SerializedName("email")
     val email: String,
 
-    @Embedded
     @field:SerializedName("picture")
     val picture: Picture?
-)
+) {
+    fun toUser(): User {
+        return User(
+            firstName = name?.first,
+            lastName = name?.last,
+            age = dob?.age,
+            phone = phone,
+            email = email,
+            image = picture?.large
+        )
+    }
+}
 
 data class Info(
 

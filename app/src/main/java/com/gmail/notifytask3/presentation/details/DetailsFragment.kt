@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
+import com.gmail.notifytask3.R
 import com.gmail.notifytask3.data.AppDatabase
 import com.gmail.notifytask3.data.UsersService
 import com.gmail.notifytask3.databinding.FragmentDetailsBinding
 import com.gmail.notifytask3.repository.UsersRepository
+import com.gmail.notifytask3.util.Extensions.loadImage
 
 class DetailsFragment : Fragment() {
 
@@ -22,7 +23,7 @@ class DetailsFragment : Fragment() {
         val db = AppDatabase.getDatabase(requireActivity().applicationContext)
         val dao = db.usersDao()
         val repository = UsersRepository(service, dao)
-        val viewModelFactory = DetailsViewModelFactory(repository, args.id)
+        val viewModelFactory = DetailsViewModelFactory(repository, args.email)
         ViewModelProvider(viewModelStore, viewModelFactory)
             .get(DetailsViewModel::class.java)
     }
@@ -39,16 +40,12 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.user.observe(viewLifecycleOwner) {
             with(binding) {
-                textName.text = "${it.name?.first}  ${it.name?.last}"
-                textAge.text = it.dob?.age.toString()
+                textName.text = getString(R.string.user_name, it.firstName, it.lastName)
+                textAge.text = getString(R.string.user_age, it.age.toString())
                 textEmail.text = it.email
                 textPhone.text = it.phone
-                it.picture?.large?.let { picture ->
-                    if (picture.isNotBlank()) {
-                        Glide.with(requireContext())
-                            .load(picture)
-                            .into(image)
-                    }
+                it.image.let { picture ->
+                    image.loadImage(picture)
                 }
             }
         }

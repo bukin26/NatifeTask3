@@ -23,6 +23,6 @@ interface UsersDao {
         insertAll(users)
     }
 
-    @Query("SELECT * FROM users WHERE email = :id")
-    suspend fun getUser(id: String): User
+    @Query("SELECT * FROM users WHERE email = :email")
+    suspend fun getUser(email: String): User
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.notifytask3.data.User
+import com.gmail.notifytask3.data.UserResponse
 import com.gmail.notifytask3.repository.UsersRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,8 +27,8 @@ class ListViewModel(private val repository: UsersRepository) : ViewModel() {
             var usersList = emptyList<User>()
             if (response.isSuccessful) {
                 response.body()?.results?.let { it ->
-                    usersList = it
-                    repository.updateUsers(it)
+                    usersList = it.map(UserResponse::toUser)
+                    repository.updateUsers(usersList)
                 }
             } else {
                 usersList = repository.loadUsers()

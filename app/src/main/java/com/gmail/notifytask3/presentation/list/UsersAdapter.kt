@@ -28,7 +28,7 @@ class UsersAdapter(
 
         fun bind(user: User, onClick: (User) -> Unit) {
             with(binding) {
-                userName.text = user.name?.first
+                userName.text = user.firstName
                 root.setOnClickListener { onClick(user) }
             }
         }

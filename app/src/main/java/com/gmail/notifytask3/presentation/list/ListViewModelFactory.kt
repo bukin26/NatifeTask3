@@ -8,8 +8,8 @@ import com.gmail.notifytask3.repository.UsersRepository
 class ListViewModelFactory(
     private val repository: UsersRepository
 ) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
 
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         when (modelClass) {
             ListViewModel::class.java -> return ListViewModel(repository) as T
         }
