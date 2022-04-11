@@ -17,7 +17,10 @@ import com.gmail.notifytask3.repository.UsersRepository
 class ListFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding
-    private val adapter = UsersAdapter(::adapterOnClick)
+    private val adapter = UsersAdapter(
+        onClick = ::adapterOnClick,
+        usersFetchCallback = { fetchUsers() }
+    )
     private val viewModel: ListViewModel by lazy {
         val service = UsersService.create()
         val db = AppDatabase.getDatabase(requireActivity().applicationContext)
@@ -45,6 +48,10 @@ class ListFragment : Fragment() {
         viewModel.users.observe(viewLifecycleOwner) { newUsers ->
             adapter.submitList(newUsers)
         }
+    }
+
+    private fun fetchUsers() {
+        viewModel.getUsers()
     }
 
     private fun adapterOnClick(user: User) {

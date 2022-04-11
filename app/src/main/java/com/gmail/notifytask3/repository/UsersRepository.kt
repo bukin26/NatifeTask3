@@ -13,7 +13,7 @@ class UsersRepository(private val usersService: UsersService, private val usersD
     }
 
     suspend fun updateUsers(users: List<User>) {
-        usersDao.updateUsers(users)
+        usersDao.insertAll(users)
     }
 
     suspend fun loadUsers(): List<User> {

@@ -21,20 +21,21 @@ class ListViewModel(private val repository: UsersRepository) : ViewModel() {
         getUsers()
     }
 
-    private fun getUsers() {
+    fun getUsers() {
         viewModelScope.launch(Dispatchers.IO) {
             val response = repository.fetchUsers()
-            var usersList = emptyList<User>()
+            var loadedUsers = emptyList<User>()
             if (response.isSuccessful) {
                 response.body()?.results?.let { it ->
-                    usersList = it.map(UserResponse::toUser)
-                    repository.updateUsers(usersList)
+                    loadedUsers = it.map(UserResponse::toUser)
+                    repository.updateUsers(loadedUsers)
                 }
             } else {
-                usersList = repository.loadUsers()
+                loadedUsers = repository.loadUsers()
             }
             withContext(Dispatchers.Main) {
-                _users.value = usersList
+                val currentUsers = _users.value
+                _users.value = currentUsers?.plus(loadedUsers) ?: loadedUsers
             }
         }
     }

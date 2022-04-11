@@ -1,5 +1,6 @@
 package com.gmail.notifytask3.presentation.list
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,8 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gmail.notifytask3.data.User
 import com.gmail.notifytask3.databinding.ItemListBinding
 
+private const val USER_PREFETCH_CONT = 5
+
 class UsersAdapter(
-    private val onClick: (User) -> Unit
+    private val onClick: (User) -> Unit,
+    private val usersFetchCallback: () -> Unit
 ) : ListAdapter<User, UsersAdapter.UsersViewHolder>(ItemDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
@@ -20,6 +24,9 @@ class UsersAdapter(
     override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item, onClick)
+        if (itemCount - position == USER_PREFETCH_CONT) {
+            usersFetchCallback()
+        }
     }
 
     class UsersViewHolder(
