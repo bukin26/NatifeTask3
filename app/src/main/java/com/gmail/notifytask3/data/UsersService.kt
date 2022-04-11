@@ -13,7 +13,7 @@ interface UsersService {
     @GET("api")
     suspend fun fetchUsers(
         @Query("results") results: Int = 15
-    ): Response<UsersList>
+    ): UsersList
 
     companion object {
 
