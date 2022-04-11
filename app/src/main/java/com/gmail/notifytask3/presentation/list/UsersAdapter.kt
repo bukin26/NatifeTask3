@@ -11,7 +11,7 @@ import com.gmail.notifytask3.util.Constants
 
 class UsersAdapter(
     private val onClick: (User) -> Unit,
-    private val usersFetchCallback: (Int) -> Unit
+    private val usersFetchCallback: () -> Unit
 ) : ListAdapter<User, UsersAdapter.UsersViewHolder>(ItemDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
@@ -23,7 +23,7 @@ class UsersAdapter(
         val item = getItem(position)
         holder.bind(item, onClick)
         if (itemCount - position == Constants.USER_PREFETCH_CONT) {
-            usersFetchCallback(itemCount + 1)
+            usersFetchCallback()
         }
     }
 
