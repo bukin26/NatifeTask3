@@ -12,7 +12,8 @@ import com.gmail.notifytask3.data.AppDatabase
 import com.gmail.notifytask3.data.User
 import com.gmail.notifytask3.data.UsersService
 import com.gmail.notifytask3.databinding.FragmentListBinding
-import com.gmail.notifytask3.repository.UsersRepository
+import com.gmail.notifytask3.repository.ListRepository
+import com.gmail.notifytask3.repository.RepositoryImpl
 
 class ListFragment : Fragment() {
 
@@ -25,7 +26,7 @@ class ListFragment : Fragment() {
         val service = UsersService.create()
         val db = AppDatabase.getDatabase(requireActivity().applicationContext)
         val dao = db.usersDao()
-        val repository = UsersRepository(service, dao)
+        val repository: ListRepository = RepositoryImpl.getInstance(service, dao)
         val viewModelFactory = ListViewModelFactory(repository)
         ViewModelProvider(viewModelStore, viewModelFactory)
             .get(ListViewModel::class.java)

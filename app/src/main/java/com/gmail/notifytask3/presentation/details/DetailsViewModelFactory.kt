@@ -2,11 +2,11 @@ package com.gmail.notifytask3.presentation.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.gmail.notifytask3.repository.UsersRepository
+import com.gmail.notifytask3.repository.DetailsRepository
 
 @Suppress("UNCHECKED_CAST")
 class DetailsViewModelFactory(
-    private val repository: UsersRepository,
+    private val repository: DetailsRepository,
     private val email: String
 ) : ViewModelProvider.Factory {
 
