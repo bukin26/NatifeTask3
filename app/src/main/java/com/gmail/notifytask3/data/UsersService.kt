@@ -17,9 +17,18 @@ interface UsersService {
 
     companion object {
 
+        @Volatile
+        private var INSTANCE: UsersService? = null
+
+        fun getInstance(): UsersService {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: create().also { INSTANCE = it }
+            }
+        }
+
         private const val BASE_URL = "https://randomuser.me/"
 
-        fun create(): UsersService {
+        private fun create(): UsersService {
 
             val logger =
                 HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.HEADERS }

@@ -11,8 +11,8 @@ import com.gmail.notifytask3.R
 import com.gmail.notifytask3.data.AppDatabase
 import com.gmail.notifytask3.data.UsersService
 import com.gmail.notifytask3.databinding.FragmentDetailsBinding
-import com.gmail.notifytask3.repository.DetailsRepository
-import com.gmail.notifytask3.repository.RepositoryImpl
+import com.gmail.notifytask3.repository.UserRepository
+import com.gmail.notifytask3.repository.UserRepositoryImpl
 import com.gmail.notifytask3.util.Extensions.loadImage
 
 class DetailsFragment : Fragment() {
@@ -20,10 +20,10 @@ class DetailsFragment : Fragment() {
     private lateinit var binding: FragmentDetailsBinding
     private val args: DetailsFragmentArgs by navArgs()
     private val viewModel: DetailsViewModel by lazy {
-        val service = UsersService.create()
+        val service = UsersService.getInstance()
         val db = AppDatabase.getDatabase(requireActivity().applicationContext)
         val dao = db.usersDao()
-        val repository: DetailsRepository = RepositoryImpl.getInstance(service, dao)
+        val repository: UserRepository = UserRepositoryImpl.getInstance(service, dao)
         val viewModelFactory = DetailsViewModelFactory(repository, args.email)
         ViewModelProvider(viewModelStore, viewModelFactory)
             .get(DetailsViewModel::class.java)
