@@ -5,27 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.gmail.notifytask3.R
 import com.gmail.notifytask3.databinding.FragmentDetailsBinding
 import com.gmail.notifytask3.util.Extensions.loadImage
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-@AndroidEntryPoint
 class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
     private val args: DetailsFragmentArgs by navArgs()
 
-    @Inject
-    lateinit var viewModelFactory: DetailsViewModelFactory.Factory
-    private val viewModel: DetailsViewModel by viewModels(factoryProducer = {
-        viewModelFactory.create(
-            args.email
-        )
-    })
+    private val viewModel: DetailsViewModel by viewModel { parametersOf(args.email) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

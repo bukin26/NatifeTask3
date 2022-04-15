@@ -4,7 +4,6 @@ import com.gmail.notifytask3.data.User
 import com.gmail.notifytask3.data.UsersDao
 import com.gmail.notifytask3.data.UsersService
 import com.gmail.notifytask3.util.Constants
-import javax.inject.Inject
 
 interface UserRepository {
 
@@ -13,7 +12,7 @@ interface UserRepository {
     suspend fun getUsers(offset: Int): List<User>
 }
 
-class UserRepositoryImpl @Inject constructor(
+class UserRepositoryImpl(
     private val usersService: UsersService,
     private val usersDao: UsersDao
 ) : UserRepository {

@@ -6,14 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.notifytask3.data.User
 import com.gmail.notifytask3.repository.UserRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-@HiltViewModel
-class ListViewModel @Inject constructor(
+
+class ListViewModel(
     private val repository: UserRepository
 ) : ViewModel() {
 
