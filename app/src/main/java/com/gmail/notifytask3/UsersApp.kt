@@ -1,8 +1,8 @@
 package com.gmail.notifytask3
 
 import android.app.Application
-import com.gmail.notifytask3.di.DaggerAppComponent
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class UsersApp : Application() {
-    val appComponent = DaggerAppComponent.factory().create(this)
 }

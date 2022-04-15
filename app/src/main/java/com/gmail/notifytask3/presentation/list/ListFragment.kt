@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gmail.notifytask3.UsersApp
 import com.gmail.notifytask3.data.User
 import com.gmail.notifytask3.databinding.FragmentListBinding
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ListFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding
@@ -20,10 +20,7 @@ class ListFragment : Fragment() {
         onClick = ::adapterOnClick,
         usersFetchCallback = ::fetchUsers
     )
-
-    @Inject
-    lateinit var viewModelFactory: ListViewModelFactory
-    private val viewModel: ListViewModel by viewModels(factoryProducer = { viewModelFactory })
+    private val viewModel: ListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +32,6 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (requireContext().applicationContext as UsersApp).appComponent.injectListFragment(this)
         with(binding) {
             recyclerView.layoutManager = LinearLayoutManager(context)
             recyclerView.adapter = adapter

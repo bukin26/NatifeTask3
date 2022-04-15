@@ -8,11 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.gmail.notifytask3.R
-import com.gmail.notifytask3.UsersApp
 import com.gmail.notifytask3.databinding.FragmentDetailsBinding
 import com.gmail.notifytask3.util.Extensions.loadImage
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
@@ -36,7 +37,6 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (requireContext().applicationContext as UsersApp).appComponent.injectDetailsFragment(this)
         viewModel.user.observe(viewLifecycleOwner) {
             with(binding) {
                 textName.text = getString(R.string.user_name, it.firstName, it.lastName)
