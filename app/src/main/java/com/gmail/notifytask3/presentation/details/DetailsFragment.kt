@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.gmail.notifytask3.R
+import com.gmail.notifytask3.UsersApp
 import com.gmail.notifytask3.databinding.FragmentDetailsBinding
-import com.gmail.notifytask3.di.DaggerAppComponent
 import com.gmail.notifytask3.util.Extensions.loadImage
 import javax.inject.Inject
 
@@ -18,10 +19,12 @@ class DetailsFragment : Fragment() {
     private val args: DetailsFragmentArgs by navArgs()
 
     @Inject
-    lateinit var viewModelFactory: DetailsViewModel.Factory
-    private val viewModel: DetailsViewModel by lazy {
-        viewModelFactory.create(args.email)
-    }
+    lateinit var viewModelFactory: DetailsViewModelFactory.Factory
+    private val viewModel: DetailsViewModel by viewModels(factoryProducer = {
+        viewModelFactory.create(
+            args.email
+        )
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +36,7 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        DaggerAppComponent.factory().create(requireContext()).injectDetailsFragment(this)
+        (requireContext().applicationContext as UsersApp).appComponent.injectDetailsFragment(this)
         viewModel.user.observe(viewLifecycleOwner) {
             with(binding) {
                 textName.text = getString(R.string.user_name, it.firstName, it.lastName)
@@ -46,6 +49,4 @@ class DetailsFragment : Fragment() {
             }
         }
     }
-
-
 }

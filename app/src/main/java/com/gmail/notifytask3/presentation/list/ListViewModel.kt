@@ -9,9 +9,8 @@ import com.gmail.notifytask3.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class ListViewModel @Inject constructor(
+class ListViewModel(
     private val repository: UserRepository
 ) : ViewModel() {
 
