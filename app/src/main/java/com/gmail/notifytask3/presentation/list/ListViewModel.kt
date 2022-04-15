@@ -9,8 +9,11 @@ import com.gmail.notifytask3.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ListViewModel(private val repository: UserRepository) : ViewModel() {
+class ListViewModel @Inject constructor(
+    private val repository: UserRepository
+) : ViewModel() {
 
     private val _users = MutableLiveData<List<User>>()
     val users: LiveData<List<User>>

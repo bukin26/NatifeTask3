@@ -6,13 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.notifytask3.data.User
 import com.gmail.notifytask3.repository.UserRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DetailsViewModel(
+class DetailsViewModel @AssistedInject constructor(
     private val repository: UserRepository,
-    private val email: String
+    @Assisted("email") private val email: String
 ) : ViewModel() {
 
     private val _user = MutableLiveData<User>()
@@ -30,5 +33,11 @@ class DetailsViewModel(
                 _user.value = newUser
             }
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+
+        fun create(@Assisted("email") email: String): DetailsViewModel
     }
 }

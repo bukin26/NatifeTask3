@@ -5,15 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gmail.notifytask3.data.AppDatabase
 import com.gmail.notifytask3.data.User
-import com.gmail.notifytask3.data.UsersService
 import com.gmail.notifytask3.databinding.FragmentListBinding
-import com.gmail.notifytask3.repository.UserRepository
-import com.gmail.notifytask3.repository.UserRepositoryImpl
+import com.gmail.notifytask3.di.DaggerAppComponent
+import javax.inject.Inject
 
 class ListFragment : Fragment() {
 
@@ -22,15 +19,9 @@ class ListFragment : Fragment() {
         onClick = ::adapterOnClick,
         usersFetchCallback = ::fetchUsers
     )
-    private val viewModel: ListViewModel by lazy {
-        val service = UsersService.getInstance()
-        val db = AppDatabase.getDatabase(requireActivity().applicationContext)
-        val dao = db.usersDao()
-        val repository: UserRepository = UserRepositoryImpl.getInstance(service, dao)
-        val viewModelFactory = ListViewModelFactory(repository)
-        ViewModelProvider(viewModelStore, viewModelFactory)
-            .get(ListViewModel::class.java)
-    }
+
+    @Inject
+    lateinit var viewModel: ListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +33,7 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        DaggerAppComponent.factory().create(requireContext()).injectListFragment(this)
         with(binding) {
             recyclerView.layoutManager = LinearLayoutManager(context)
             recyclerView.adapter = adapter

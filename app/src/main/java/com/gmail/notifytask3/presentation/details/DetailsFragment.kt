@@ -5,28 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.gmail.notifytask3.R
-import com.gmail.notifytask3.data.AppDatabase
-import com.gmail.notifytask3.data.UsersService
 import com.gmail.notifytask3.databinding.FragmentDetailsBinding
-import com.gmail.notifytask3.repository.UserRepository
-import com.gmail.notifytask3.repository.UserRepositoryImpl
+import com.gmail.notifytask3.di.DaggerAppComponent
 import com.gmail.notifytask3.util.Extensions.loadImage
+import javax.inject.Inject
 
 class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
     private val args: DetailsFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var viewModelFactory: DetailsViewModel.Factory
     private val viewModel: DetailsViewModel by lazy {
-        val service = UsersService.getInstance()
-        val db = AppDatabase.getDatabase(requireActivity().applicationContext)
-        val dao = db.usersDao()
-        val repository: UserRepository = UserRepositoryImpl.getInstance(service, dao)
-        val viewModelFactory = DetailsViewModelFactory(repository, args.email)
-        ViewModelProvider(viewModelStore, viewModelFactory)
-            .get(DetailsViewModel::class.java)
+        viewModelFactory.create(args.email)
     }
 
     override fun onCreateView(
@@ -39,6 +33,7 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        DaggerAppComponent.factory().create(requireContext()).injectDetailsFragment(this)
         viewModel.user.observe(viewLifecycleOwner) {
             with(binding) {
                 textName.text = getString(R.string.user_name, it.firstName, it.lastName)
@@ -51,4 +46,6 @@ class DetailsFragment : Fragment() {
             }
         }
     }
+
+
 }
